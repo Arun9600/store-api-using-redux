@@ -6,9 +6,7 @@ const ProductsDetails = ({ productId }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.productsDetail);
   useEffect(() => {
-    if (productId) {
-      dispatch(getProductDetails(productId));
-    }
+    dispatch(getProductDetails(productId));
   }, [dispatch, productId]);
   return (
     <>
