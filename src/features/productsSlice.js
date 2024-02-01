@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL } from "../utils";
 
 const initialState = {
-  datas: [],
+  datas: null,
 };
 const productsSlice = createSlice({
   name: "productsList",

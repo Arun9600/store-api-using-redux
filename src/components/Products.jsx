@@ -1,13 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProductList } from "../features/productsSlice";
-import { Box, Container, Grid, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Button,
+  Drawer,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import ProductsDetails from "./ProductDetails";
 const Products = () => {
+  const [sideBarOpen, setsideBarOpen] = useState(false);
+  const [selectedProductData, setSelectedProductData] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getProductList());
-  });
+  }, [dispatch]);
   const { datas } = useSelector((state) => state.productsList);
+  const handleQuickView = (productId) => {
+    setSelectedProductData(productId);
+    setsideBarOpen(true);
+  };
+  const theme = useTheme();
+  const isLarge = useMediaQuery(theme.breakpoints.up("sm"));
+  const sideBarWidth = isLarge ? "500px" : "320px";
 
   return (
     <>
@@ -53,7 +72,16 @@ const Products = () => {
                     </Typography>
                     <Grid container>
                       <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
-                        <Button variant="contained">Quick View</Button>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={() => {
+                            setsideBarOpen(true);
+                            handleQuickView(data.id);
+                          }}
+                        >
+                          Quick View
+                        </Button>
                       </Grid>
                       <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
                         <Button variant="contained">Add To Cart</Button>
@@ -65,6 +93,14 @@ const Products = () => {
           </Grid>
         </Container>
       </Box>
+      <Drawer
+        open={sideBarOpen}
+        anchor="right"
+        onClose={() => setsideBarOpen(false)}
+        PaperProps={{ sx: { width: `${sideBarWidth}` } }}
+      >
+        <ProductsDetails productId={selectedProductData} />
+      </Drawer>
     </>
   );
 };
