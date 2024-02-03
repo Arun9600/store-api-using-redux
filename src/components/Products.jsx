@@ -1,6 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getProductList } from "../features/productsSlice";
+import IconButton from "@mui/material/IconButton";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import Cart from "./Cart";
 import {
   Box,
   Container,
@@ -12,8 +15,10 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ProductsDetails from "./ProductDetails";
+import { add } from "../features/cartSlice";
 const Products = () => {
   const [sideBarOpen, setsideBarOpen] = useState(false);
+  const [cartSideBar, setCartSideBar] = useState(false);
   const [selectedProductData, setSelectedProductData] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -23,6 +28,10 @@ const Products = () => {
   const handleQuickView = (productId) => {
     setSelectedProductData(productId);
     setsideBarOpen(true);
+  };
+  const addToCart = (data) => {
+    dispatch(add(data));
+    setCartSideBar(true);
   };
   const theme = useTheme();
   const isLarge = useMediaQuery(theme.breakpoints.up("sm"));
@@ -39,7 +48,7 @@ const Products = () => {
                   item
                   xl={4}
                   lg={4}
-                  md={6}
+                  md={4}
                   sm={6}
                   xs={12}
                   key={data.id}
@@ -50,14 +59,14 @@ const Products = () => {
                       src={data.image}
                       alt={data.title}
                       style={{
-                        height: "300px",
+                        height: "250px",
                         objectFit: "cover",
                         width: "90%",
                       }}
                     />
                   </Box>
                   <Box sx={{ padding: "15px" }}>
-                    <Typography variant="h6" style={{ fontSize: "18px" }}>
+                    <Typography variant="h6" sx={{ fontSize: "16px" }}>
                       {data.title}
                     </Typography>
                     <Typography
@@ -83,8 +92,25 @@ const Products = () => {
                           Quick View
                         </Button>
                       </Grid>
-                      <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
-                        <Button variant="contained">Add To Cart</Button>
+                      <Grid
+                        item
+                        xl={6}
+                        lg={6}
+                        md={6}
+                        sm={6}
+                        xs={6}
+                        style={{ textAlign: "right" }}
+                      >
+                        <IconButton
+                          color="primary"
+                          aria-label="add to shopping cart"
+                          onClick={() => {
+                            setCartSideBar(true);
+                            addToCart(data);
+                          }}
+                        >
+                          <AddShoppingCartIcon sx={{ color: "#2e7d32" }} />
+                        </IconButton>
                       </Grid>
                     </Grid>
                   </Box>
@@ -100,6 +126,14 @@ const Products = () => {
         PaperProps={{ sx: { width: `${sideBarWidth}` } }}
       >
         <ProductsDetails productId={selectedProductData} />
+      </Drawer>
+      <Drawer
+        open={cartSideBar}
+        anchor="right"
+        onClose={() => setCartSideBar(false)}
+        PaperProps={{ sx: { width: `${sideBarWidth}` } }}
+      >
+        <Cart />
       </Drawer>
     </>
   );
