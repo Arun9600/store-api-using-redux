@@ -2,12 +2,20 @@ import { Box, Typography, Grid } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { remove } from "../features/cartSlice";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { addQuantity, remove, decreaseQuantity } from "../features/cartSlice";
 const Cart = () => {
   const { data } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const removeItem = (id) => {
     dispatch(remove(id));
+  };
+  const addQty = (item) => {
+    dispatch(addQuantity(item));
+  };
+  const decreaseQty = (item) => {
+    dispatch(decreaseQuantity(item));
   };
   return (
     <>
@@ -23,7 +31,15 @@ const Cart = () => {
         >
           Your Cart
         </Typography>
-        {data &&
+        {data && data.length < 1 ? (
+          <Box>
+            <Typography variant="p" sx={{ padding: "0 30px" }}>
+              {" "}
+              Your Cart is Empty
+            </Typography>
+          </Box>
+        ) : (
+          data &&
           data.map((item) => (
             <Box
               key={item.id}
@@ -54,11 +70,29 @@ const Cart = () => {
                   />
                 </Grid>
                 <Grid item xl={6} lg={6} md={7} sm={7} xs={12}>
-                  <Box>{item.title}</Box>
-                  <Box>
-                    Price: {item.quantity} x {item.price} = Rs.{" "}
+                  <Box sx={{ marginBottom: "5px", fontWeight: "bold" }}>
+                    {item.title}
+                  </Box>
+                  <Box sx={{ marginBottom: "5px", fontWeight: "bold" }}>
+                    {item.quantity} x {item.price} = Rs.{" "}
                     {item.quantity * item.price}
                   </Box>
+                  <IconButton
+                    color="primary"
+                    aria-label="add"
+                    onClick={() => {
+                      addQty(item);
+                    }}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                  <IconButton
+                    color="primary"
+                    aria-label="remove"
+                    onClick={() => decreaseQty(item)}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
                 </Grid>
                 <Grid item xl={1} lg={1} md={1} sm={1} xs={12}>
                   <IconButton
@@ -71,7 +105,8 @@ const Cart = () => {
                 </Grid>
               </Grid>
             </Box>
-          ))}
+          ))
+        )}
       </Box>
     </>
   );

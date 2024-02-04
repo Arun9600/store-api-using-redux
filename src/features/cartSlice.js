@@ -19,8 +19,18 @@ const cartSlice = createSlice({
     remove: (state, action) => {
       state.data = state.data.filter((item) => item.id !== action.payload);
     },
+    addQuantity: (state, action) => {
+      const qty = state.data.find((item) => item.id === action.payload.id);
+      qty.quantity += 1;
+    },
+    decreaseQuantity: (state, action) => {
+      const decrease = state.data.find((item) => item.id === action.payload.id);
+      if (decrease && decrease.quantity > 1) {
+        decrease.quantity -= 1;
+      }
+    },
   },
 });
 
-export const { add, remove } = cartSlice.actions;
+export const { add, remove, addQuantity, decreaseQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
