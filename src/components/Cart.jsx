@@ -1,5 +1,6 @@
 import { Box, Typography, Grid } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -17,6 +18,8 @@ const Cart = () => {
   const decreaseQty = (item) => {
     dispatch(decreaseQuantity(item));
   };
+  const total = data.reduce((acc, item) => acc + item.quantity * item.price, 0);
+  const subTotal = Math.round(total);
   return (
     <>
       <Box sx={{ padding: "30px 0" }}>
@@ -107,6 +110,16 @@ const Cart = () => {
             </Box>
           ))
         )}
+        <Box
+          sx={{
+            padding: "0 30px",
+            textAlign: "center",
+            marginTop: "10px",
+            fontWeight: "bold",
+          }}
+        >
+          {data && data.length > 0 ? ` Total: Rs. ${subTotal}` : ""}
+        </Box>
       </Box>
     </>
   );
