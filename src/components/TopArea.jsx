@@ -20,21 +20,20 @@ const TopArea = () => {
     <>
       <Box sx={{ padding: "15px 0", backgroundColor: "#000" }}>
         <Container>
-          <Grid container>
-            <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
-              <Typography variant="h1" sx={{ color: "#fff", fontSize: "24px" }}>
+          <Grid container sx={{ alignItems: "center" }}>
+            <Grid
+              item
+              xl={10}
+              lg={10}
+              md={10}
+              sm={10}
+              sx={{ textAlign: "left" }}
+            >
+              <Typography variant="h1" sx={{ color: "#fff", fontSize: "20px" }}>
                 Store API using Redux Toolkit
               </Typography>
             </Grid>
-            <Grid
-              item
-              xl={2}
-              lg={2}
-              md={2}
-              sm={2}
-              xs={2}
-              sx={{ textAlign: "right" }}
-            >
+            <Grid item xl={2} lg={2} md={2} sm={2} sx={{ textAlign: "right" }}>
               <IconButton
                 color="primary"
                 aria-label="add to shopping cart"
